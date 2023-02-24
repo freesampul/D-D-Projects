@@ -1,0 +1,14 @@
+#box{
+    text-align: center;
+    width: 100%;
+    border: 2px solid black;
+}
+
+#inputBox{
+    text-align: center;
+}
+
+input{
+    width: 400px;
+    height: 200px;
+}

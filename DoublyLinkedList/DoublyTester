@@ -1,0 +1,16 @@
+import java.util.ArrayList[]
+
+public class DoublyTester{
+	public static void main (String [] args)
+	{
+	   DoublyLinkedList dll = new DoublyLinkedList();
+	   dll.add(Nucelotide.G);
+	   dll.add(Nucelotide.A);
+	   dll.add(Nucelotide.G);
+	   
+	System.out.println(dll.toString());
+	System.out.println(dll.toStringBackwards());
+	
+	}
+
+}
