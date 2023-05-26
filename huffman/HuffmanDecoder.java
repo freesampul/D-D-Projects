@@ -70,41 +70,41 @@ public class HuffmanDecoder {
 }
 
     public void decodeFile(String encodedFile) {
-        if (!encodedFile.endsWith(".huf")) {
+        if (!encodedFile.endsWith(".huf")) {  //If statement checks the file type/ending 
             throw new IllegalArgumentException("make it dot huf, yo!");
         }
-        String decodedFile = encodedFile.substring(0, encodedFile.length() - 4);
+
+
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(encodedFile));
-            FileWriter writer = new FileWriter(decodedFile);
+            String decodedFile = encodedFile.substring(0, encodedFile.lastIndexOf(".")); //makes the decoded file
+    
+            BufferedReader reader = new BufferedReader(new FileReader(encodedFile)); //reader
+            FileWriter writer = new FileWriter(decodedFile); //writer 
+            StringBuilder stringBuilder = new StringBuilder(); // string storing our codes :D 
+    
+            int current; // what code the program is looking at 
 
-            StringBuilder binaryBuilder = new StringBuilder();
-            int currentChar;
-            while ((currentChar = reader.read()) != -1) {
-                String binary = String.format("%8s", Integer.toBinaryString(currentChar & 0xFF)).replace(' ', '0');
-                binaryBuilder.append(binary);
-                String binaryString = binaryBuilder.toString();
-                if (isCode(binaryString)) {
-                    char decodedChar = decodeChar(binaryString);
-                    if (decodedChar != '\0') {
-                        writer.write(decodedChar);
-                        binaryBuilder.setLength(0);
-                    }
+
+            while ((current = reader.read()) != -1) { // loop 
+                    String binaryString = String.format("%8s", Integer.toBinaryString(current)).replace(' ', '0'); // replaces the empty spaces with 0s
+                    stringBuilder.append(binaryString); // starts putting the binary into the actual string for the file (good?)
+            }
+            reader.close(); // stops reading. My error is definietely (idk how to spell) not before this line (i pray to god that was true)
+            int paddingBits = Integer.parseInt(stringBuilder.substring(stringBuilder.length() - 8), 2); //this calculates the amount of padding i put in the first part of this god awful project
+            stringBuilder.setLength(stringBuilder.length() - 8 - paddingBits);
+    
+            int start = 0;
+            for (int end = 1; end <= stringBuilder.length(); end++) {
+                String code = stringBuilder.substring(start, end);
+                if (mappedCodes.containsKey(code)) {
+                    char decodedChar = mappedCodes.get(code);
+                    writer.write(decodedChar);
+                    start = end;
                 }
             }
-
-            int paddingBits = reader.read();
-            if (paddingBits >= 0 && paddingBits < 8) {
-                binaryBuilder.setLength(binaryBuilder.length() - paddingBits);
-                String lastCode = binaryBuilder.toString();
-                char lastChar = decodeChar(lastCode);
-                if (lastChar != '\0') {
-                    writer.write(lastChar);
-                }
-            }
-
-            reader.close();
+    
             writer.close();
+    
         } catch (IOException e) {
             e.printStackTrace();
         }

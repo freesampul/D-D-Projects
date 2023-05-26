@@ -8,9 +8,9 @@ import java.util.*;
 
 public class HuffmanCodeGenerator {
     
-    int[] letterFreq = new int[128];
-    Node root = null;
-    String charCodes[] = new String[128];
+    private int[] letterFreq = new int[128];
+    private Node root = null;
+    private String charCodes[] = new String[128];
 
 
     public HuffmanCodeGenerator(String inputFile) throws IOException{
@@ -95,9 +95,9 @@ public class HuffmanCodeGenerator {
             Node node = new Node(i, letterFreq[i]);
             String code = charCodes[node.getCharacter()];
             if (code != null)
-            writer.println(" " + code);
+            writer.println(code);
             else
-            writer.println(" ");
+            writer.println("");
          }
          writer.close();
          }

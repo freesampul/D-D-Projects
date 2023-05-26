@@ -1,33 +1,17 @@
-import java.io.IOException;
+import java.util.*;
+import java.io.*;
 
 public class tester {
-    public static void main(String[] args) {
-        String inputFile = "ABCDEFG.txt";
-        String codeFile = "codes.txt";
-        HuffmanCodeGenerator hcg = null;
-        HuffmanCodeGenerator sol = null;
-        HuffmanCodeGenerator student = null;
-        try {
-            hcg = new HuffmanCodeGenerator(inputFile);
-            hcg.mapCodes();
-            hcg.makeCodeFile(codeFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(hcg.getCode('a')); 
-        System.out.println(hcg.getCode('b')); 
-        System.out.println(hcg.getCode('c')); 
-        System.out.println(hcg.getCode('d')); 
-        System.out.println(hcg.getCode('e')); 
-        System.out.println(hcg.getCode('f')); 
-        System.out.println(hcg.getCode('g')); 
-        System.out.println(hcg.getCode('h')); 
+    public static void main (String[] args) throws IOException
+    {
+        HuffmanCodeGenerator gn = new HuffmanCodeGenerator("ABCDEFG.txt"); 
+        gn.makeCodeFile("code.txt");
+
+        HuffmanEncoder encoder = new HuffmanEncoder("code.txt");
+        encoder.encodeLong("ABCDEFG.txt", "encodedfile.txt");
+        HuffmanDecoder decoder = new HuffmanDecoder("code.txt");
+        decoder.decodeLong("encodedfile.txt", "decodedfile.txt");
         
-        System.out.println(hcg.getFrequency('e')); 
-
-
-      
 
     }
-
 }

@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 
 public class HuffmanEncoder 
 {
-   String charCodes[] = new String[128];
+   private String charCodes[] = new String[128];
 
     public HuffmanEncoder (String codeFile)
     {
@@ -68,42 +68,43 @@ public class HuffmanEncoder
     }
 
     public void encodeFile(String filetoCompress) {
-        String filename = filetoCompress + ".huf";
+        String filename = filetoCompress + ".huf"; //adds huf ending 
 
-        try {
-            BufferedReader read = new BufferedReader(new FileReader(filetoCompress));
-            BufferedWriter write = new BufferedWriter(new FileWriter(filename));
+        try { // main loop
+            BufferedReader read = new BufferedReader(new FileReader(filetoCompress)); //creates a file reader
+            BufferedWriter write = new BufferedWriter(new FileWriter(filename)); // creates a file writer
 
-            int pos1 = 0;
-            int pos2 = 0;
-            String line;
-            while ((line = read.readLine()) != null) {
-                for (char c : line.toCharArray()) {
-                    String code = charCodes[c];
-                    for (char bit : code.toCharArray()) {
-                        pos1 <<= 1;
-                        if (bit == '1') {
-                            pos1 |= 1;
-                        }
-                        pos2++;
-                        if (pos2 == 8) {
-                            write.write(String.valueOf(pos1));
-                            pos1 = 0;
-                            pos2 = 0;
-                        }
-                    }
-                }
+            int charac = 0; // creates a character counter 
+            StringBuilder encoded = new StringBuilder(); // This is the main string that the encoded elements are stored on
+
+            while ((charac = read.read()) != -1) { // while loop that goes through each line, sets character/charac to the each line
+                String code = encodeChar((char) charac); // makes each line/code into a string 
+                encoded.append(code); //puts the string onto the block of encoded string. Will generate all encoded parts together 
+            }
+            read.close(); // closes reader ---> No more reading after this point 
+            int space = (8 - (encoded.length() % 8)); // calculates the number of "spaces" we need these are the 0s
+            if (space == 8){ space = 0; } // if there are 8 spaces, that would be one full bit (duh) so there are no spaces (duh, again)
+
+            for (int i = 0; i < space; i++) //loop that actually adds the correct number of spaces, why doesn't this work????? 
+            {
+                encoded.append('0');
             }
 
-            if (pos2 > 0) {
-                pos1 <<= (8 - pos2);
-                write.write(String.valueOf(pos1));
-            }
 
-            read.close();
+            int charCount = encoded.length() / 8; // so this is the total amount of characters, but like didn't we just add the spaces? Wait that last line was stupid, cause the spaces filled out the extra 
+
+            for (int i = 0; i < charCount; i++)
+            {
+                String parts = encoded.substring(i * 8, (i+1) * 8); // grabs each 8 bit line 
+                int value = Integer.parseInt(parts, 2); // finds the associates value
+                write.write((char) value); //writes the proppa nums into the file
+            }
+            write.write(space); // why doesn't this shit work? 
+
+
             write.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+}
 }
