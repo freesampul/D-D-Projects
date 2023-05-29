@@ -71,11 +71,7 @@ public class HuffmanEncoder
 
         try { // main loop
             BufferedReader read = new BufferedReader(new FileReader(filetoCompress)); //creates a file reader
-<<<<<<< HEAD
             PrintWriter write = new PrintWriter(new FileWriter(filename)); // creates a file writer
-=======
-            BufferedWriter write = new BufferedWriter(new FileWriter(filename)); // creates a file writer
->>>>>>> 30c07e2963989770d2571d91359527f950f3bddd
 
             int charac = 0; // creates a character counter 
             StringBuilder encoded = new StringBuilder(); // This is the main string that the encoded elements are stored on

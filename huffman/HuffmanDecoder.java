@@ -80,11 +80,7 @@ public class HuffmanDecoder {
             String decodedFile = encodedFile.substring(0, encodedFile.lastIndexOf(".")); //makes the decoded file
     
             BufferedReader reader = new BufferedReader(new FileReader(encodedFile)); //reader
-<<<<<<< HEAD
             PrintWriter writer = new PrintWriter(decodedFile); //writer 
-=======
-            FileWriter writer = new FileWriter(decodedFile); //writer 
->>>>>>> 30c07e2963989770d2571d91359527f950f3bddd
             StringBuilder stringBuilder = new StringBuilder(); // string storing our codes :D 
     
             int current; // what code the program is looking at 
