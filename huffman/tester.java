@@ -11,5 +11,6 @@ public class tester {
         HuffmanDecoder decoder = new HuffmanDecoder("code.txt");
         decoder.decodeLong("encodedfile.txt", "decodedfile.txt");
         encoder.encodeFile("ABCDEFG.txt");
+        decoder.decodeFile("ABCDEFG.txt.huf");
     }
 }

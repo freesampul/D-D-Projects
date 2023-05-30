@@ -39,6 +39,9 @@ public class HuffmanCodeGenerator {
                 nodes.add(nodeAdd);
             }
         }
+        if (nodes.isEmpty()) {
+            throw new IllegalStateException("Empty file");
+        }
         while (nodes.size() > 1) {
             Node comp1 = nodes.remove();
             Node comp2 = nodes.remove();

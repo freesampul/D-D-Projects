@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -71,13 +72,15 @@ public class HuffmanEncoder
 
         try { // main loop
             BufferedReader read = new BufferedReader(new FileReader(filetoCompress)); //creates a file reader
-            PrintWriter write = new PrintWriter(new FileWriter(filename)); // creates a file writer
+            BufferedWriter write = new BufferedWriter(new FileWriter(filename)); // creates a file writer
 
             int charac = 0; // creates a character counter 
             StringBuilder encoded = new StringBuilder(); // This is the main string that the encoded elements are stored on
 
             while ((charac = read.read()) != -1) { // while loop that goes through each line, sets character/charac to the each line
                 String code = encodeChar((char) charac); // makes each line/code into a string 
+                System.out.println(code);
+                System.out.println((char) charac);
                 encoded.append(code); //puts the string onto the block of encoded string. Will generate all encoded parts together 
             }
             read.close(); // closes reader ---> No more reading after this point 
@@ -98,7 +101,7 @@ public class HuffmanEncoder
                 int value = Integer.parseInt(parts, 2); // finds the associates value
                 write.write((char) value); //writes the proppa nums into the file
             }
-            write.write(space); // why doesn't this shit work? 
+            write.write(String.valueOf(space)); // why doesn't this shit work? 
 
 
             write.close();

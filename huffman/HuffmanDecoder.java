@@ -70,44 +70,87 @@ public class HuffmanDecoder {
     }
 }
 
-    public void decodeFile(String encodedFile) {
-        if (!encodedFile.endsWith(".huf")) {  //If statement checks the file type/ending 
-            throw new IllegalArgumentException("make it dot huf, yo!");
-        }
-
-
-        try {
-            String decodedFile = encodedFile.substring(0, encodedFile.lastIndexOf(".")); //makes the decoded file
-    
-            BufferedReader reader = new BufferedReader(new FileReader(encodedFile)); //reader
-            PrintWriter writer = new PrintWriter(decodedFile); //writer 
-            StringBuilder stringBuilder = new StringBuilder(); // string storing our codes :D 
-    
-            int current; // what code the program is looking at 
-
-
-            while ((current = reader.read()) != -1) { // loop 
-                    String binaryString = String.format("%8s", Integer.toBinaryString(current)).replace(' ', '0'); // replaces the empty spaces with 0s
-                    stringBuilder.append(binaryString); // starts putting the binary into the actual string for the file (good?)
-            }
-            reader.close(); // stops reading. My error is definietely (idk how to spell) not before this line (i pray to god that was true)
-            int paddingBits = Integer.parseInt(stringBuilder.substring(stringBuilder.length() - 8), 2); //this calculates the amount of padding i put in the first part of this god awful project
-            stringBuilder.setLength(stringBuilder.length() - 8 - paddingBits);
-    
-            int start = 0;
-            for (int end = 1; end <= stringBuilder.length(); end++) {
-                String code = stringBuilder.substring(start, end);
-                if (mappedCodes.containsKey(code)) {
-                    char decodedChar = mappedCodes.get(code);
-                    writer.write(decodedChar);
-                    start = end;
-                }
-            }
-    
-            writer.close();
-    
-        } catch (IOException e) {
-            e.printStackTrace();
+private String[] decodeBits(String binary) {
+    String answer = "";
+    String currentBinary = "";
+    while (binary.length() > 0) {
+        currentBinary += binary.charAt(0);
+        binary = binary.substring(1);
+        if (isCode(currentBinary)) {
+            answer += decodeChar(currentBinary);
+            currentBinary = "";
         }
     }
+    String[] decoded = { answer, currentBinary };
+    return decoded;
+}
+
+
+
+
+//This parts a real mess!
+
+    public void decodeFile(String encodedFile) throws IOException {
+    if (encodedFile.substring(encodedFile.length() - 3).equals(".huf")) { // check file "type" (why is type in quotes?)
+        throw new IllegalArgumentException("File must end in .huf yo!");
+    }
+
+    String decodedFile = encodedFile.substring(0, encodedFile.length() - 4);
+
+    BufferedReader reader = new BufferedReader(new FileReader(encodedFile));
+    BufferedReader reader2 = new BufferedReader(new FileReader(encodedFile));
+
+    String answer = "";
+    String currentBinary = "";
+
+    //Sets up propa varaibles m8!
+
+    int fileLength = 0;
+    int exit = 99999999;
+    while (reader.ready()) {
+        fileLength++;
+        exit = reader.read() - 48;
+    } //Don't wanna read parts that dont exist :D
+    String charCode = "";
+    for (int i = 0; i < fileLength; i++) {
+        char character = (char) reader2.read();
+
+        charCode = Integer.toBinaryString((int) character);
+        while (charCode.length()<8)
+        {
+            charCode = "0" + charCode;
+        } //Generate the decoding for codeing into de-coded codes
+
+        if (i < fileLength-2) { 
+            currentBinary += charCode;
+            System.out.print(currentBinary);
+            String[] data = decodeBits(currentBinary);
+
+            answer += data[0];
+            currentBinary = data[1];
+        } 
+        else if  (i < fileLength-1){
+            for (int j = 0; j < exit; j++)
+            {
+                charCode = charCode.substring(0, charCode.length()-1);
+            }
+            currentBinary += charCode;
+            System.out.print(currentBinary);
+            String[] data = decodeBits(currentBinary);
+
+            answer += data[0];
+            currentBinary = data[1];
+        }
+        else {
+            
+        }
+    }
+    reader.close();
+    reader2.close();
+    PrintWriter writer = new PrintWriter(new FileWriter(decodedFile));
+    writer.write(answer);
+    writer.close();
+}
+//It works?
+
 }
