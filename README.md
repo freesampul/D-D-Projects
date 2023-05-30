@@ -7,4 +7,4 @@ From working with new data structures to simple neural nets, these projects were
 
 This course was focus on datastructures and their runtimes, computing everything ourselves and recreating datastructures with Java.
 
-Current proj: Huffman code generator & dynamic programming.
+Current proj:  dynamic programming. (Last project of the year :D:!
