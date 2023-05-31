@@ -12,20 +12,26 @@ public class DynamicProgramming {
     
     // You can assume lowPayouts.length == highPayouts.length
     public static int hiLoStress(int[] lowPayouts, int[] highPayouts) {
-       // I <3 fortnitee
-        int lpl = lowPayouts.length;
-        int hpl = highPayouts.length;
-        int[] answ = new int[lpl + 2];
+        int length = lowPayouts.length;
 
-        answ [lpl+1] = Math.max(lowPayouts[lpl], highPayouts[hpl]);
-        for(int i = 0; i < lpl-1; i++)
+        int[] max = new int[length+1];
+        
+
+        max[0] = 0;
+        if(length > 0)
         {
-            answ[i] = Math.max(Math.max(lowPayouts[lpl], highPayouts[hpl +1]),(Math.max(lowPayouts[lpl], highPayouts[hpl])));
+            max[0] = Math.max(lowPayouts[0], highPayouts[0]);
         }
 
-        return answ[lpl-1];
+        for(int i = 2; i <= length; i++)
+        {
+            int lowPay = lowPayouts[i - 1] + max[i - 1];
+            int highPaY = highPayouts[i - 1] + max[i - 2];
+            max[i] = Math.max(lowPay, highPaY);
+        }
 
-       //if this is in someoneee's code = they stole eit from @sampulaskI!
+       return max[length];
+       //this is so fortnite 
 
     }
     
@@ -63,22 +69,37 @@ public class DynamicProgramming {
 	/* Uses memoization to calculate the route which grants the most cookies, 
 	 * starting at [0][0], only going right or down at each point */
 	 public static int dynamicCookies(int[][] cookieGrid) {
-    //    int r = cookieGrid.length;
-    //     int c = cookieGrid[r].length;
-    //     int[][] arr = new int[cookieGrid[r+1]][cookieGrid[c+1]];
-    //     if(r > cookieGrid.length -1 || c > cookieGrid[r].length -1)
-	// 	{
-	// 		return 0;
-	// 	}
-	// 	if(cookieGrid[r][c] == -1)
-	// 	{
-	// 		return 0;
-	// 	}
-	//  	else
-	//  	{
-	// 		return cookieGrid[r][c] + Math.max(arr[r][c+1], arr[r+1][c]);
-	// 	}
-    return 3;
+        int[][] dynamicCookie = new int[cookieGrid.length][cookieGrid[0].length];
+
+        for(int i = 0; i < dynamicCookie.length; i++)
+        {
+            for(int k = 0; k < dynamicCookie[0].length; k++)
+            {
+                dynamicCookie[i][k] = -1;
+            }
+        }
+
+        for (int i = dynamicCookie.length -1; i >= 0; i--)
+        {
+
+            for (int k = dynamicCookie[0].length -1; k >= 0; k--)
+            {
+                if(cookieGrid[i][k] == -1)
+                dynamicCookie[i][k]=0;
+                else
+                {
+                    int right = 0; 
+                    if (k + 1 < dynamicCookie[0].length) 
+                    right = dynamicCookie[i][k + 1];
+                    int down = 0;
+                    if(i + 1 < dynamicCookie.length) 
+                    down = dynamicCookie[i + 1][k];
+                    dynamicCookie[i][k] = cookieGrid[i][k] + Math.max(right, down);
+                }
+            }
+
+        }
+        return dynamicCookie[0][0];
     }
 }
     
