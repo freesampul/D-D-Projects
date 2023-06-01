@@ -13,30 +13,26 @@ public class DynamicProgramming {
     // You can assume lowPayouts.length == highPayouts.length
     public static int hiLoStress(int[] lowPayouts, int[] highPayouts) {
         int length = lowPayouts.length;
-
-        int[] max = new int[length+1];
-        
-
-        max[0] = 0;
-        if(length > 0)
-        {
-            max[0] = Math.max(lowPayouts[0], highPayouts[0]);
-        }
-
-        for(int i = 2; i <= length; i++)
-        {
-            int lowPay = lowPayouts[i - 1] + max[i - 1];
-            int highPaY = highPayouts[i - 1] + max[i - 2];
-            max[i] = Math.max(lowPay, highPaY);
-        }
-
-       return max[length];
-       //this is so fortnite 
-
-    }
     
-
-
+        if (length == 0) {
+            return 0;
+        }
+    
+        int[] dp = new int[length];
+        dp[0] = Math.max(lowPayouts[0], highPayouts[0]);
+    
+        for (int i = 1; i < length; i++) {
+            if (i == 1) {
+                dp[i] = Math.max(dp[i - 1], lowPayouts[i]);
+            } else {
+                dp[i] = Math.max(dp[i - 1], dp[i - 2] + lowPayouts[i]);
+            }
+            dp[i] = Math.max(dp[i], dp[i - 1] + highPayouts[i]);
+        }
+    
+        return dp[length - 1];
+       //this is so fortnite 
+    }
 
     public static int scavHunt(int[] times, int[] points) {
         return scaver(times, points, 0);

@@ -4,12 +4,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
+import java.util.*;
 
 
 public class HuffmanEncoder 
 {
    private String charCodes[] = new String[128];
+   private Map<Character, String> charCoder = new HashMap<>();
+
 
     public HuffmanEncoder (String codeFile)
     {
@@ -21,6 +23,7 @@ public class HuffmanEncoder
             int pos = 0;
             while((hold = reaeder.readLine()) !=null)
             {
+                charCoder.put((char) pos, hold);
                 charCodes[pos] = hold;
                 pos++;
             }
@@ -32,17 +35,11 @@ public class HuffmanEncoder
 
 
 
-    public String encodeChar(char input)
-    {
-        int character = (int) input;
-
-        if(character < charCodes.length && character > -1) {
-            if (charCodes[character] != null)
-            {
-                return charCodes[character];
-            }
-        }  
-        return null;
+    public String encodeChar(char input) {
+        if (!charCoder.containsKey(input)) {
+            return charCoder.get((char)0);
+        }
+        return charCoder.get(input);
     }
 
 
@@ -77,13 +74,26 @@ public class HuffmanEncoder
             int charac = 0; // creates a character counter 
             StringBuilder encoded = new StringBuilder(); // This is the main string that the encoded elements are stored on
 
+            boolean hasMultiChar = false;
+            char distinctChar = '\0';
+
             while ((charac = read.read()) != -1) { // while loop that goes through each line, sets character/charac to the each line
+                if(!hasMultiChar)
+                {
+                    distinctChar = (char) charac;
+                    hasMultiChar = true;
+                }
                 String code = encodeChar((char) charac); // makes each line/code into a string 
-                System.out.println(code);
-                System.out.println((char) charac);
                 encoded.append(code); //puts the string onto the block of encoded string. Will generate all encoded parts together 
             }
             read.close(); // closes reader ---> No more reading after this point 
+           
+            if (!hasMultiChar || encoded.length() == 0) {
+                encoded.append(encodeChar(distinctChar));
+            }
+    
+           
+           
             int space = (8 - (encoded.length() % 8)); // calculates the number of "spaces" we need these are the 0s
             if (space == 8){ space = 0; } // if there are 8 spaces, that would be one full bit (duh) so there are no spaces (duh, again)
 
@@ -93,13 +103,16 @@ public class HuffmanEncoder
             }
 
 
-            int charCount = encoded.length() / 8; // so this is the total amount of characters, but like didn't we just add the spaces? Wait that last line was stupid, cause the spaces filled out the extra 
+            int charCount = (encoded.length() + 7) / 8;  // so this is the total amount of characters, but like didn't we just add the spaces? Wait that last line was stupid, cause the spaces filled out the extra 
+
 
             for (int i = 0; i < charCount; i++)
             {
-                String parts = encoded.substring(i * 8, (i+1) * 8); // grabs each 8 bit line 
-                int value = Integer.parseInt(parts, 2); // finds the associates value
-                write.write((char) value); //writes the proppa nums into the file
+            int startIndex = i * 8;
+            int endIndex = Math.min(startIndex + 8, encoded.length());
+            String parts = encoded.substring(startIndex, endIndex);
+            int value = Integer.parseInt(parts, 2);
+            write.write((char) value);
             }
             write.write(String.valueOf(space)); // why doesn't this shit work? 
 

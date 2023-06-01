@@ -13,18 +13,40 @@ public class HuffmanCodeGenerator {
     private String charCodes[] = new String[128];
 
 
-    public HuffmanCodeGenerator(String inputFile) throws IOException{
-
+    public HuffmanCodeGenerator(String inputFile) throws IOException {
         File file = new File(inputFile);
         BufferedReader reader = new BufferedReader(new FileReader(file));
-
-        while(reader.ready())
-        {
-            letterFreq[reader.read()]++;
+        int distinctCharCount = 0;
+        int charRead;
+        while ((charRead = reader.read()) != -1) {
+            if (letterFreq[charRead] == 0) {
+                distinctCharCount++;
+            }
+            letterFreq[charRead]++;
         }
-        generateTree();
         reader.close();
+    
+        if (distinctCharCount <= 1) {
+            if (distinctCharCount == 0) {
+                charCodes[0] = "0";
+            } else {
+                for (int i = 0; i < letterFreq.length; i++) {
+                    if (letterFreq[i] != 0) {
+                        charCodes[i] = "0";
+                        break;
+                    }
+                }
+            }
+        } else {
+            reader = new BufferedReader(new FileReader(file));
+            while ((charRead = reader.read()) != -1) {
+                letterFreq[charRead]++;
+            }
+            reader.close();
+            generateTree();
+        }
     }
+    
 
     public int getFrequency(char c)
     {
