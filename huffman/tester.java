@@ -6,6 +6,7 @@ public class tester {
     {
         HuffmanCodeGenerator gn = new HuffmanCodeGenerator("ABCDEFG.txt"); 
         gn.makeCodeFile("code.txt");
+        System.out.println(gn.getFrequency('a'));
 
         HuffmanEncoder encoder = new HuffmanEncoder("code.txt");
         HuffmanDecoder decoder = new HuffmanDecoder("code.txt");

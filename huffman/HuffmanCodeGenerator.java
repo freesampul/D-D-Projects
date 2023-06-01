@@ -40,7 +40,7 @@ public class HuffmanCodeGenerator {
         } else {
             reader = new BufferedReader(new FileReader(file));
             while ((charRead = reader.read()) != -1) {
-                letterFreq[charRead]++;
+              //
             }
             reader.close();
             generateTree();
