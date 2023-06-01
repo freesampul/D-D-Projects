@@ -18,19 +18,17 @@ public class DynamicProgramming {
             return 0;
         }
     
-        int[] dp = new int[length];
-        dp[0] = Math.max(lowPayouts[0], highPayouts[0]);
-    
-        for (int i = 1; i < length; i++) {
-            if (i == 1) {
-                dp[i] = Math.max(dp[i - 1], lowPayouts[i]);
-            } else {
-                dp[i] = Math.max(dp[i - 1], dp[i - 2] + lowPayouts[i]);
-            }
-            dp[i] = Math.max(dp[i], dp[i - 1] + highPayouts[i]);
+        int[] max = new int[length + 1];
+        max[length-1] = lowPayouts[length-1];
+        max[length] = 0;
+
+        for(int i = length-2; i >= 0; i--)
+        {
+            max[i] = Math.max(lowPayouts[i] + max[i+1], highPayouts[i] + max[i+2]);
         }
-    
-        return dp[length - 1];
+
+
+        return max[0];
        //this is so fortnite 
     }
 
